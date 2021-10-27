@@ -7,11 +7,15 @@ import { ExpenseDetail } from '../models/expenses-detail.entity';
 export class ExpensesDetailRepository {
     constructor(
         @InjectModel(ExpenseDetail)
-        private readonly expenseModel: typeof ExpenseDetail,
+        private readonly expenseDetailModel: typeof ExpenseDetail,
     ) { }
 
     create(dto: CreateExpenseDetailDto, transaction: any = null): Promise<ExpenseDetailDto> {
-        return this.expenseModel.create({ ...dto, isClosed: false }, { transaction });
+        return this.expenseDetailModel.create(dto, { transaction });
+    }
+
+    bulkCreate(dtos: CreateExpenseDetailDto[], transaction: any = null): Promise<ExpenseDetailDto[]> {
+        return this.expenseDetailModel.bulkCreate(dtos, { transaction });
     }
 
     update(
@@ -19,7 +23,7 @@ export class ExpensesDetailRepository {
         columns: UpdateExpenseDetailDto,
         transaction: any = null,
     ): Promise<[number, ExpenseDetailDto[]]> {
-        return this.expenseModel.update(columns, { where: { id }, transaction });
+        return this.expenseDetailModel.update(columns, { where: { id }, transaction });
     }
 
     findAll(
@@ -28,7 +32,7 @@ export class ExpensesDetailRepository {
         rows: ExpenseDetailDto[];
         count: number;
     }> {
-        return this.expenseModel.findAndCountAll({
+        return this.expenseDetailModel.findAndCountAll({
             where: filters
         });
     }
@@ -36,7 +40,7 @@ export class ExpensesDetailRepository {
     findOne(
         where: Record<string, any>,
     ): Promise<ExpenseDetailDto> {
-        return this.expenseModel.findOne({
+        return this.expenseDetailModel.findOne({
             where: { ...where }
         });
     }

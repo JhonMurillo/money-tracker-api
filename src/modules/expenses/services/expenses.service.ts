@@ -43,15 +43,14 @@ export class ExpensesService {
                 transaction
             );
 
-            const promises = expense.expenseDetail.map(item =>
-                this.expensesDetailService.create(
-                    { ...item, expenseId: expenseSaved.id },
-                    transaction
-                )
+            const details = expense.expenseDetail.map(item => {
+                return { ...item, expenseId: expenseSaved.id }
+            });
+
+            await this.expensesDetailService.bulkCreate(
+                details,
+                transaction
             );
-
-            await Promise.all(promises);
-
             await transaction.commit();
             return expenseSaved['dataValues'];
         } catch (error) {

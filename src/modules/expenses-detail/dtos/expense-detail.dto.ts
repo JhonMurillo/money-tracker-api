@@ -5,7 +5,7 @@ export class CreateExpenseDetailDto {
 
     @IsNotEmpty()
     @IsString()
-    @MinLength(5)
+    @MinLength(2)
     @MaxLength(20)
     description: string;
 

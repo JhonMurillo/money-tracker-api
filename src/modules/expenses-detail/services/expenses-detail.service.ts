@@ -26,6 +26,22 @@ export class ExpensesDetailService {
         }
     }
 
+    async bulkCreate(expenseDetails: CreateExpenseDetailControllerDto[], transaction): Promise<ExpenseDetailDto> {
+        try {
+            const expenseDetailsSaved = await this.expenseDetailRepository.bulkCreate(
+                expenseDetails,
+                transaction
+            );
+            return expenseDetailsSaved['dataValues'];
+        } catch (error) {
+            if (error instanceof HttpException) {
+                throw error;
+            }
+            console.error(error);
+            throw new HttpException(`Unexpected error creating the expense Detail`, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     async update(id: string, dto: UpdateExpenseDetailDto): Promise<void> {
         let updateInfo: [number, ExpenseDetailDto[]];
 
